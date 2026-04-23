@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 import numpy as np
 import os
 
@@ -11,19 +10,28 @@ API_IP = os.getenv("API_IP", "YOUR_BACKEND_IP")
 JWT_TOKEN = os.getenv("JWT_TOKEN", "YOUR_JWT_TOKEN")
 OPENAI_KEY = os.getenv("OPENAI_API_KEY", "YOUR_OPENAI_KEY")
 
-st.set_page_config(page_title="AML Monitoring Dashboard", layout="wide", initial_sidebar_state="collapsed")
+# --- Page Config ---
+st.set_page_config(
+    page_title="AML Monitoring Dashboard", 
+    layout="wide", 
+    initial_sidebar_state="collapsed"
+)
 
 # --- Custom CSS for Finesse ---
-# Hides default Streamlit menus, adds padding, and styles metric cards
 st.markdown("""
     <style>
+    /* Hide Streamlit Default UI */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+    
+    /* Adjust main container padding */
     .block-container {
-        padding-top: 1rem;
+        padding-top: 2rem;
         padding-bottom: 0rem;
     }
+    
+    /* Style the metric cards */
     div[data-testid="metric-container"] {
         background-color: #1E1E1E;
         border: 1px solid #333;
@@ -32,15 +40,23 @@ st.markdown("""
         color: #FFFFFF;
         box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
+    
+    /* Style the metric labels */
     div[data-testid="metric-container"] label {
         color: #A0AEC0 !important;
         font-weight: 600;
         letter-spacing: 0.5px;
     }
+    
+    /* Style dataframe headers */
+    .stDataFrame {
+        border-radius: 8px !important;
+        border: 1px solid #333 !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- Mock Data Generation for Demo Finesse ---
+# --- Mock Data Generation ---
 np.random.seed(42)
 hours = [f"{h}:00" for h in range(8, 16)]
 transactions_valid = np.random.randint(5, 20, size=len(hours))
@@ -63,10 +79,9 @@ col_chart1, col_chart2 = st.columns([2, 1])
 
 with col_chart1:
     st.markdown("<h4 style='color: #A0AEC0;'>Recent Activity Flow</h4>", unsafe_allow_html=True)
-    # Stacked Bar Chart (like Image 2)
     fig_bar = go.Figure()
-    fig_bar.add_trace(go.Bar(x=hours, y=transactions_valid, name='Valid', marker_color='#D4AF37')) # Gold/Yellow
-    fig_bar.add_trace(go.Bar(x=hours, y=transactions_fraud, name='Flagged', marker_color='#E53E3E')) # Red
+    fig_bar.add_trace(go.Bar(x=hours, y=transactions_valid, name='Valid', marker_color='#D4AF37')) 
+    fig_bar.add_trace(go.Bar(x=hours, y=transactions_fraud, name='Flagged', marker_color='#E53E3E')) 
     
     fig_bar.update_layout(
         barmode='stack',
@@ -80,7 +95,6 @@ with col_chart1:
 
 with col_chart2:
     st.markdown("<h4 style='color: #A0AEC0;'>Verification Status</h4>", unsafe_allow_html=True)
-    # Donut Chart (like Images 1 & 2)
     labels = ['Verified Valid', 'Confirmed Fraud', 'Unassigned']
     values = [130, 80, 40]
     colors = ['#D4AF37', '#E53E3E', '#4A5568']
@@ -98,7 +112,6 @@ with col_chart2:
 # 3. Bottom Row: Ongoing Investigations Table
 st.markdown("<h4 style='color: #A0AEC0; margin-top: 20px;'>High-Priority Alerts & Investigations</h4>", unsafe_allow_html=True)
 
-# Using a styled pandas dataframe to look like the investigation table
 df_investigations = pd.DataFrame({
     "Client": ["Johnson", "Martha", "Corp LLC", "Doe"],
     "Alert Reason": [">10 transactions same day", ">25 transactions same month", "Structuring detected", "High-risk jurisdiction"],
@@ -106,7 +119,6 @@ df_investigations = pd.DataFrame({
     "Status": ["Investigation Opened", "In Peer Review", "Confirmed Unusual", "Pending"]
 })
 
-# Apply simple styling to the dataframe to fit the dark theme
 st.dataframe(
     df_investigations,
     use_container_width=True,
