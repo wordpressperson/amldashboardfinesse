@@ -91,7 +91,7 @@ st.markdown("<h1 class='demo-title'>AML Transaction Risks Monitoring</h1>", unsa
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Total Transactions", "36,421", "+1.2% today")
 col2.metric("Unusual Transactions", "250", "-5 since yesterday")
-col3.metric("Amount Transacted", "$36.18M", "High Volume")
+col3.metric("Amount Transacted", "GH₵36.18M", "High Volume")
 col4.metric("Alerts in SLA", "89%", "Target: 100%")
 
 st.markdown("<br>", unsafe_allow_html=True)
@@ -141,7 +141,7 @@ st.markdown("<h4 style='color: #FFFFFF; margin-top: 20px;'>High-Priority Alerts 
 df_investigations = pd.DataFrame({
     "Client": ["Johnson", "Martha", "Corp LLC", "Doe"],
     "Alert Reason": [">10 transactions same day", ">25 transactions same month", "Structuring detected", "High-risk jurisdiction"],
-    "Amount": ["$550,000", "$2,550,000", "$85,000", "$120,000"],
+    "Amount": ["GH₵550,000", "GH₵2,550,000", "GH₵85,000", "GH₵120,000"],
     "Status": ["Investigation Opened", "In Peer Review", "Confirmed Unusual", "Pending"]
 })
 
